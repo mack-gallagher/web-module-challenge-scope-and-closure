@@ -30,11 +30,18 @@ console.log('example task:', processFirstItem(['foo','bar'],function(str){return
   Study the code for counter1 and counter2, then answer the questions below.
   
   1. What is the difference between counter1 and counter2?
+
+The 'count' variable that is incremeneted by counter1 is "inside" the counter - that is, it's *within* the closure created the original time counter1 was declared from inside the invocation of counterMaker, and NOTHING ELSE CAN REACH IN AND MODIFY IT. By contrast, counter2 returns a mutation of a variable *in the global scope*, which may be touched by other things - procedures, functions, etc.
+
   
   2. Which of the two uses a closure? How can you tell?
+
+counter1 uses a closure. It returns a second function, that keeps track of a variable from inside the scope of the first function, and therefore known only to that second function.
   
-  3. In what scenario would the counter1 code be preferable? In what scenario would 
-     counter2 be better?  
+  3. In what scenario would the counter1 code be preferable? In what scenario would counter2 be better?  
+
+Because nothing else can touch the count variable returned in counter1, counter1 would be preferable if you were using it to update a variable that nothing else in your code needed to access. But if you were checking up on a variable that other things *were* accessing, you'd need to use something more like counter2.
+
 */
 
 // counter1 code
@@ -64,8 +71,8 @@ Use the inning function below to do the following:
 NOTE: This will be a callback function for the tasks below
 */
 
-function inning(/*Code Here*/){
-    /*Code Here*/
+function inning(){
+  return Math.floor(Math.random()*3);
 }
 
 
@@ -83,8 +90,16 @@ Use the finalScore function below to do the following:
 }
 */ 
 
-function finalScore(/*Code Here*/){
-  /*Code Here*/
+function finalScore(callbackFn, numInnings){
+  const res = {
+    "Home": 0,
+    "Away": 0,
+  };
+  for (let i = 0; i < numInnings; i++) {
+    res["Home"] += inning();
+    res["Away"] += inning();
+  }
+  return res;
 }
 
 
@@ -101,9 +116,14 @@ For example: invoking getInningScore(inning) might return this object:
   */
 
 
-function getInningScore(/*Your Code Here */) {
-  /*Your Code Here */
-
+function getInningScore(callbackFn) {
+  const res = {
+    "Home": 0,
+    "Away": 0,
+  };
+  res["Home"] = callbackFn();
+  res["Away"] = callbackFn();
+  return res;
 }
 
 
