@@ -167,12 +167,27 @@ Use the scoreboard function below to do the following:
   "This game will require extra innings: Away 10 - Home 10"
 ] */
 // NOTE: There is no test associated with this code; if your output matches the given example, consider it complete!
-function scoreboard(/* CODE HERE */) {
-  /* CODE HERE */
-}
 
+function scoreboard(inningPopulatorFn,scoreCreatorFn,numInnings) {
+  const display = [];
+  const runningScore = {
+    "Away": 0,
+    "Home": 0,
+  };
+  for (let i = 1; i <= numInnings; i++) {
+    let inningScore = inningPopulatorFn(scoreCreatorFn);
+    display.push(`Inning ${i}: Away ${inningScore["Away"]} - Home ${inningScore["Home"]}`);
+    runningScore["Away"] += inningScore["Away"]; runningScore["Home"] += inningScore["Home"];
+  };
+  runningScore["Away"]===runningScore["Home"] ?
+    display.push(`This game will require extra innings: Away ${runningScore["Away"]} - Home ${runningScore["Home"]}`)
+  : display.push(`Final Score: Away ${runningScore["Away"]} - Home ${runningScore["Home"]}`);
+  return display;
+};
 
-
+/* TESTING SCOREBOARD */
+console.log(scoreboard(getInningScore,inning,10));
+/* END TEST OF SCOREBOARD */
 
 /* 🛑🛑🛑🛑🛑 Please do not modify anything below this line 🛑🛑🛑🛑🛑 */
 function foo(){
